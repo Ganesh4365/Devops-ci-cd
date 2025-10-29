@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git 'https://github.com/Ganesh4365/Devops-ci-cd-project.git'
+                git 'https://github.com/Ganesh4365/Devops-ci-cd.git'
             }
         }
 
