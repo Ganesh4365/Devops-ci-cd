@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        IMAGE_NAME = 'ganesh4365/devops-ci-cd'
+        IMAGE_NAME = 'ganesh4365/Devops-ci-cd:latest'
     }
 
     stages {
