@@ -3,41 +3,36 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-        IMAGE_NAME = 'ganesh4365/Devops-ci-cd:latest'
+        IMAGE_NAME = "ganesh4365/devops-ci-cd"
     }
 
     stages {
-        stage('Clone Repo') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/Ganesh4365/Devops-ci-cd.git'
+                git branch: 'main', url: 'https://github.com/Ganesh4365/Devops-ci-cd.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${IMAGE_NAME}:${BUILD_NUMBER}")
+                    sh "docker build -t ${IMAGE_NAME}:latest ."
                 }
             }
         }
 
-        stage('Push to DockerHub') {
+        stage('DockerHub Login') {
             steps {
                 script {
-                    docker.withRegistry('', DOCKERHUB_CREDENTIALS) {
-                        docker.image("${IMAGE_NAME}:${BUILD_NUMBER}").push()
-                        docker.image("${IMAGE_NAME}:${BUILD_NUMBER}").push("latest")
-                    }
+                    sh "echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin"
                 }
             }
         }
 
-        stage('Deploy Container on EC2') {
+        stage('Push Image') {
             steps {
                 script {
-                    sh "docker stop devops-ci || true"
-                    sh "docker rm devops-ci || true"
-                    sh "docker run -d -p 3000:3000 --name devops-ci ${IMAGE_NAME}:${BUILD_NUMBER}"
+                    sh "docker push ${IMAGE_NAME}:latest"
                 }
             }
         }
