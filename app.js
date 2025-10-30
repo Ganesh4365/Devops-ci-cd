@@ -1,11 +1,10 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello from DevOps CI/CD Project!');
+app.get("/", (req, res) => {
+  res.send("Hello from DevOps CI/CD App 🚀");
 });
 
-app.listen(port, () => {
-  console.log(`App running on http://localhost:${port}`);
+app.listen(3000, "0.0.0.0", () => {
+  console.log("Server running on port 3000");
 });
