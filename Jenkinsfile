@@ -5,7 +5,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    def image = docker.build("ganesh4365/devops-ci-cd:${BUILD_NUMBER}")
+                    image = docker.build("ganesh4365/devops-ci-cd:${BUILD_NUMBER}")
                 }
             }
         }
@@ -14,8 +14,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
-                        def image = docker.image("ganesh4365/devops-ci-cd:${BUILD_NUMBER}")
-                        image.push()
+                        image.push()   // Push build number tag
+                        image.push("latest") // Push latest tag ✅
                     }
                 }
             }
@@ -24,7 +24,8 @@ pipeline {
 
     post {
         success {
-            echo "✅ Deployment Success!"
+            echo "✅ Docker Image pushed to DockerHub successfully!"
+            echo "👉 Tags: ${BUILD_NUMBER}, latest"
         }
         failure {
             echo "❌ Deployment Failed! Check Pipeline logs"
